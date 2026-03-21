@@ -413,6 +413,7 @@ dispatchBtn.addEventListener("click", () => {
 
 // INITIALIZE
 
+
 updateStats();
 showVehicles("ambulance");
 document
