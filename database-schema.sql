@@ -1,8 +1,3 @@
--- ============================================
--- EMERGENCY DISPATCH SYSTEM - DATABASE SCHEMA
--- Phase 1: Database Design
--- ============================================
-
 -- Create database
 CREATE DATABASE IF NOT EXISTS emergency_dispatch;
 USE emergency_dispatch;
