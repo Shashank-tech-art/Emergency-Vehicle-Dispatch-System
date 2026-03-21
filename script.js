@@ -1,4 +1,8 @@
-// Vehicle Database with realistic coordinates (within 0-5km range)
+// ============================================
+// EMERGENCY DISPATCH SYSTEM - PHASE 1
+// Frontend with Mock Data
+// ============================================
+
 const vehicleDatabase = {
   ambulance: [
     {
@@ -10,67 +14,73 @@ const vehicleDatabase = {
     },
     {
       id: "A-102",
-      lat: 40.715,
-      lng: -74.009,
+      lat: 40.7135,
+      lng: -74.0075,
       status: "available",
       name: "AMB-102",
     },
     {
       id: "A-103",
-      lat: 40.71,
-      lng: -74.002,
+      lat: 40.7105,
+      lng: -74.004,
       status: "available",
       name: "AMB-103",
     },
-    { id: "A-104", lat: 40.72, lng: -74.015, status: "busy", name: "AMB-104" },
+    { id: "A-104", lat: 40.715, lng: -74.009, status: "busy", name: "AMB-104" },
   ],
   fire: [
     {
       id: "F-201",
-      lat: 40.714,
-      lng: -74.008,
+      lat: 40.7115,
+      lng: -74.005,
       status: "available",
       name: "FIR-201",
     },
     {
       id: "F-202",
-      lat: 40.718,
-      lng: -74.012,
+      lat: 40.7145,
+      lng: -74.0085,
       status: "available",
       name: "FIR-202",
     },
-    { id: "F-203", lat: 40.725, lng: -74.02, status: "busy", name: "FIR-203" },
+    {
+      id: "F-203",
+      lat: 40.7165,
+      lng: -74.011,
+      status: "busy",
+      name: "FIR-203",
+    },
   ],
   police: [
     {
       id: "P-301",
-      lat: 40.7135,
-      lng: -74.0075,
-      status: "available",
+      lat: 40.712,
+      lng: -74.0065,
+      status: "busy",
       name: "POL-301",
     },
     {
       id: "P-302",
-      lat: 40.716,
-      lng: -74.01,
+      lat: 40.714,
+      lng: -74.008,
       status: "available",
       name: "POL-302",
     },
     {
       id: "P-303",
-      lat: 40.722,
-      lng: -74.017,
+      lat: 40.71,
+      lng: -74.0035,
       status: "available",
       name: "POL-303",
     },
     {
       id: "P-304",
-      lat: 40.73,
-      lng: -74.025,
+      lat: 40.716,
+      lng: -74.0105,
       status: "available",
       name: "POL-304",
     },
-    { id: "P-305", lat: 40.735, lng: -74.03, status: "busy", name: "POL-305" },
+    { id: "P-305", lat: 40.718, lng: -74.013, status: "busy", name: "POL-305" },
   ],
 };
 
@@ -106,6 +116,10 @@ const successResult = document.getElementById("successResult");
 const errorResult = document.getElementById("errorResult");
 const errorMessage = document.getElementById("errorMessage");
 
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
 // Calculate distance in KM (Haversine formula)
 function calculateDistanceKM(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -120,14 +134,29 @@ function calculateDistanceKM(lat1, lon1, lat2, lon2) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   let distance = R * c;
 
+  // Ensure realistic distance between 0.1 and 5.0 km
   if (distance < 0.1) distance = 0.1;
   if (distance > 5.0) distance = 4.9;
 
   return parseFloat(distance.toFixed(1));
 }
 
+// Calculate response time in hours (0.1 to 3.0 hours)
+// Speed varies based on distance to make times unique
 function calculateResponseHours(distance) {
-  const speed = 20 + Math.random() * 15;
+  // Different speeds for different distances to create variety
+  let speed;
+
+  if (distance < 1) {
+    speed = 25 + Math.random() * 10; // 25-35 km/h for very close
+  } else if (distance < 2) {
+    speed = 30 + Math.random() * 15; // 30-45 km/h
+  } else if (distance < 3) {
+    speed = 35 + Math.random() * 15; // 35-50 km/h
+  } else {
+    speed = 40 + Math.random() * 20; // 40-60 km/h for longer distances
+  }
+
   let hours = distance / speed;
 
   if (hours < 0.1) hours = 0.1;
@@ -166,7 +195,10 @@ function showStatus(message, type) {
   }, 3000);
 }
 
+// ============================================
 // LOCATION TRACKING
+// ============================================
+
 trackingBtn.addEventListener("click", () => {
   if (!navigator.geolocation) {
     showStatus("Geolocation not supported by your browser", "error");
@@ -248,7 +280,9 @@ trackingBtn.addEventListener("click", () => {
   );
 });
 
+// ============================================
 // VEHICLE TYPE SELECTION
+// ============================================
 
 typeCards.forEach((card) => {
   card.addEventListener("click", () => {
@@ -270,11 +304,15 @@ function selectType(type) {
   showVehicles(type);
 }
 
-// DISPLAY VEHICLES
+// ============================================
+// DISPLAY VEHICLES - UNIQUE DISTANCES FOR EACH VEHICLE
+// ============================================
+
 function showVehicles(type) {
   const vehicles = vehicleDatabase[type];
 
   const vehiclesWithDetails = vehicles.map((vehicle) => {
+    // Calculate distance - will be UNIQUE for each vehicle because coordinates are different
     const distance = calculateDistanceKM(
       currentLocation.lat,
       currentLocation.lng,
@@ -292,7 +330,7 @@ function showVehicles(type) {
   // Sort by distance (nearest first)
   vehiclesWithDetails.sort((a, b) => a.distance - b.distance);
 
-  // Generate table rows
+  // Generate table rows with UNIQUE distances and times
   vehiclesTableBody.innerHTML = vehiclesWithDetails
     .map(
       (vehicle) => `
@@ -304,7 +342,9 @@ function showVehicles(type) {
                     ${vehicle.status === "available" ? "AVAILABLE" : "BUSY"}
                 </span>
             </td>
-            <td><span class="distance-value">${vehicle.distance.toFixed(1)} km</span></td>
+            <td>
+                <span class="distance-value">${vehicle.distance.toFixed(1)} km</span>
+            </td>
             <td>
                 ${
                   vehicle.status === "available"
@@ -327,7 +367,9 @@ function showVehicles(type) {
   selectedVehicleType.textContent = typeNames[type];
 }
 
+// ============================================
 // SELECT VEHICLE
+// ============================================
 
 window.selectVehicleById = function (vehicleId) {
   const vehicle = vehicleDatabase[selectedType].find((v) => v.id === vehicleId);
@@ -335,7 +377,18 @@ window.selectVehicleById = function (vehicleId) {
   if (vehicle.status === "available") {
     selectedVehicle = vehicle;
     dispatchBtn.disabled = false;
-    showStatus(`${vehicle.id} selected for dispatch`, "success");
+
+    // Show which vehicle was selected with its distance
+    const distance = calculateDistanceKM(
+      currentLocation.lat,
+      currentLocation.lng,
+      vehicle.lat,
+      vehicle.lng,
+    );
+    showStatus(
+      `${vehicle.id} selected - ${distance.toFixed(1)} km away`,
+      "success",
+    );
   } else {
     selectedVehicle = null;
     dispatchBtn.disabled = true;
@@ -351,7 +404,9 @@ window.selectVehicleById = function (vehicleId) {
   });
 };
 
+// ============================================
 // DISPATCH VEHICLE
+// ============================================
 
 dispatchBtn.addEventListener("click", () => {
   if (!selectedVehicle) return;
@@ -392,7 +447,10 @@ dispatchBtn.addEventListener("click", () => {
       // Refresh vehicle list
       showVehicles(selectedType);
 
-      showStatus(`${selectedVehicle.id} dispatched successfully!`, "success");
+      showStatus(
+        `${selectedVehicle.id} dispatched successfully! ${distance.toFixed(1)} km, ${responseHours} hours ETA`,
+        "success",
+      );
     } else {
       errorMessage.textContent = "Dispatch failed. Please try again.";
       errorResult.classList.remove("hidden");
@@ -411,8 +469,9 @@ dispatchBtn.addEventListener("click", () => {
   }, 1500);
 });
 
+// ============================================
 // INITIALIZE
-
+// ============================================
 
 updateStats();
 showVehicles("ambulance");
