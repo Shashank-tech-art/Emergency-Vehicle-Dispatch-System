@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emergency Dispatch System</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1><span>🚨</span> Emergency Dispatch System</h1>
+        <p>Real-time vehicle tracking • Smart dispatch • Emergency response</p>
+      </div>
+
+      <!-- Status Cards -->
+      <div class="stats-grid">
+        <div class="stat-card ambulance">
+          <div class="stat-header">
+            <span class="stat-icon">🚑</span>
+            <span class="stat-badge">Medical</span>
+          </div>
+          <div class="stat-number" id="ambulanceTotal">4</div>
+          <div class="stat-label">Total Ambulances</div>
+          <div class="stat-detail available" id="ambulanceAvailable">
+            3 available
+          </div>
+          <div class="stat-detail busy" id="ambulanceBusy">1 busy</div>
+        </div>
+
+        <div class="stat-card fire">
+          <div class="stat-header">
+            <span class="stat-icon">🚒</span>
+            <span class="stat-badge">Fire & Rescue</span>
+          </div>
+          <div class="stat-number" id="fireTotal">3</div>
+          <div class="stat-label">Total Fire Trucks</div>
+          <div class="stat-detail available" id="fireAvailable">
+            2 available
+          </div>
+          <div class="stat-detail busy" id="fireBusy">1 busy</div>
+        </div>
+
+        <div class="stat-card police">
+          <div class="stat-header">
+            <span class="stat-icon">🚓</span>
+            <span class="stat-badge">Law Enforcement</span>
+          </div>
+          <div class="stat-number" id="policeTotal">5</div>
+          <div class="stat-label">Total Police Cars</div>
+          <div class="stat-detail available" id="policeAvailable">
+            4 available
+          </div>
+          <div class="stat-detail busy" id="policeBusy">1 busy</div>
+        </div>
+
+        <div class="stat-card tracking">
+          <div class="stat-header">
+            <span class="stat-icon">📍</span>
+            <span class="stat-badge">Live</span>
+          </div>
+          <div class="stat-number" id="trackingStatus">Inactive</div>
+          <div class="stat-label">Tracking Status</div>
+          <div class="stat-detail" id="trackingAccuracy">—</div>
+        </div>
+      </div>
+
+      <!-- Location Section -->
+      <div class="location-section">
+        <div class="section-header">
+          <div class="section-icon">📍</div>
+          <h2>Emergency Location</h2>
+        </div>
+
+        <div class="location-grid">
+          <div class="coord-box">
+            <div class="coord-row">
+              <span class="coord-label">Latitude:</span>
+              <span class="coord-value" id="latitude">40.7128</span>
+            </div>
+            <div class="coord-row">
+              <span class="coord-label">Longitude:</span>
+              <span class="coord-value" id="longitude">-74.0060</span>
+            </div>
+            <div class="coord-row">
+              <span class="coord-label">Accuracy:</span>
+              <span class="coord-value" id="accuracy">15 meters</span>
+              <span id="accuracyBadge" class="accuracy-badge high">High</span>
+            </div>
+          </div>
+
+          <div class="tracking-controls">
+            <button id="trackingBtn" class="btn-track">
+              <span>📍</span>
+              <span id="trackingBtnText">Start Live Tracking</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="locationStatus" class="status-message hidden">
+          <span id="statusMessage"></span>
+        </div>
+      </div>
+
+      <!-- Vehicle Type Selection -->
+      <div class="section-header-small">
+        <h3>Select Vehicle Type</h3>
+      </div>
+
+      <div class="type-grid">
+        <div class="type-card ambulance" data-type="ambulance">
+          <div class="type-header">
+            <span class="type-icon">🚑</span>
+
+            <span class="type-name">Ambulance</span>
+          </div>
+          <div class="type-stats">
+            <span id="ambulanceTypeAvailable">3 available</span>
+            <span>4 total</span>
+          </div>
+        </div>
+
+        <div class="type-card fire" data-type="fire">
+          <div class="type-header">
+            <span class="type-icon">🚒</span>
+            <span class="type-name">Fire Truck</span>
+          </div>
+          <div class="type-stats">
+            <span id="fireTypeAvailable">2 available</span>
+            <span>3 total</span>
+          </div>
+        </div>
+
+        <div class="type-card police" data-type="police">
+          <div class="type-header">
+            <span class="type-icon">🚓</span>
+            <span class="type-name">Police Car</span>
+          </div>
+          <div class="type-stats">
+            <span id="policeTypeAvailable">4 available</span>
+            <span>5 total</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicles Table -->
+      <div id="vehiclesSection" class="vehicles-section">
+        <div class="table-header">
+          <h3><span id="selectedVehicleType">Ambulance</span> Vehicles</h3>
+          <div class="total-badge">Fleet Status</div>
+        </div>
+
+        <div class="table-container">
+          <table class="vehicles-table">
+            <thead>
+              <tr>
+                <th>Vehicle ID</th>
+                <th>Status</th>
+                <th>Distance (km)</th>
+                <th>Response Time</th>
+                <th>Vehicle Name</th>
+              </tr>
+            </thead>
+            <tbody id="vehiclesTableBody">
+              <!-- Vehicles will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Dispatch Button -->
+      <div class="dispatch-container">
+        <button id="dispatchBtn" class="btn-dispatch" disabled>
+          <span>🚨</span>
+          Dispatch Selected Vehicle
+          <span>⚡</span>
+        </button>
+      </div>
+
+      <!-- Result Messages -->
+      <div id="successResult" class="result-card success hidden">
+        <div class="result-header">
+          <div class="result-icon success">✓</div>
+          <div>
+            <h3>Vehicle Dispatched Successfully!</h3>
+            <p>Emergency unit is responding</p>
+          </div>
+        </div>
+        <div class="result-details">
+          <div class="result-item">
+            <div class="result-label">Vehicle</div>
+            <div class="result-value" id="resultVehicle">—</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Distance</div>
+            <div class="result-value" id="resultDistance">
+              — <span class="result-unit">km</span>
+            </div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Response Time</div>
+            <div class="result-value" id="resultTime">
+              — <span class="result-unit">hours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="errorResult" class="result-card error hidden">
+        <div class="result-header">
+          <div class="result-icon error">✗</div>
+          <div>
+            <h3>Dispatch Failed</h3>
+            <p id="errorMessage">Please try again</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
