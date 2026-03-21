@@ -50,6 +50,7 @@ INSERT INTO vehicles (vehicle_type, vehicle_number, latitude, longitude, status)
 ('ambulance', 'AMB-104', 40.7200, -74.0150, 'busy'),
 ('fire', 'FIR-201', 40.7140, -74.0080, 'available'),
 ('fire', 'FIR-202', 40.7180, -74.0120, 'available'),
+-- ('fire', 'FIR-207', 40.7120, -74.0220, 'available'),
 ('fire', 'FIR-203', 40.7250, -74.0200, 'busy'),
 ('fire', 'FIR-204', 40.7260, -74.0201, 'available'),
 
