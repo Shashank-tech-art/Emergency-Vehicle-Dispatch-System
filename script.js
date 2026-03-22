@@ -1,8 +1,3 @@
-// ============================================
-// EMERGENCY DISPATCH SYSTEM - FIXED VERSION
-// Realistic response times: 10-15 minutes per km
-// Fixed: Vehicle name display
-// ============================================
 
 // Vehicle Database
 const vehicleDatabase = {
@@ -88,22 +83,22 @@ function calculateResponseTime(distance) {
   let speed;
   
   if (distance < 1) {
-    speed = 4 + Math.random() * 2; // 4-6 km/h
+    speed = 4 + Math.random() * 2; 
   } else if (distance < 2) {
-    speed = 4.5 + Math.random() * 2; // 4.5-6.5 km/h
+    speed = 4.5 + Math.random() * 2; 
   } else if (distance < 3) {
-    speed = 5 + Math.random() * 2; // 5-7 km/h
+    speed = 5 + Math.random() * 2; 
   } else if (distance < 4) {
-    speed = 5.5 + Math.random() * 2; // 5.5-7.5 km/h
+    speed = 5.5 + Math.random() * 2; 
   } else {
-    speed = 6 + Math.random() * 2; // 6-8 km/h
+    speed = 6 + Math.random() * 2; 
   }
   
   let hours = distance / speed;
   
   // Ensure minimum 3 minutes for very close vehicles
   if (hours < 0.05) {
-    hours = 0.05; // 3 minutes minimum
+    hours = 0.05; 
   }
   
   // Maximum 3 hours
@@ -129,7 +124,6 @@ function calculateDistanceKM(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// Generate realistic distance UNDER 5km (between 0.5km and 4.9km)
 function getDistanceUnder5km(vehicleId) {
   const distanceMap = {
     // Ambulances
