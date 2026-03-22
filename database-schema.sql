@@ -6,6 +6,7 @@ USE emergency_dispatch;
 -- TABLE: vehicles
 -- Stores all emergency vehicles
 -- ============================================
+
 CREATE TABLE vehicles (
     vehicle_id INT PRIMARY KEY AUTO_INCREMENT,
     vehicle_type ENUM('ambulance', 'fire', 'police') NOT NULL,
