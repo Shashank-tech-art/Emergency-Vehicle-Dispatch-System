@@ -1,5 +1,9 @@
 
-// Vehicle Database
+// Vehicle Database:
+    //    This stores all vehicles like ambulance, fire, police
+    //     Each vehicle has id, location, status and name
+
+
 const vehicleDatabase = {
   ambulance: [
     { id: "A-101", lat: 28.615, lng: 77.21, status: "available", name: "AMB-101" },
@@ -22,6 +26,9 @@ const vehicleDatabase = {
 };
 
 // Current location
+  // These store user's current location and tracking status
+
+
 let currentLocation = null;
 let selectedType = "ambulance";
 let selectedVehicle = null;
